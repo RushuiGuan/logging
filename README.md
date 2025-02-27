@@ -1,5 +1,5 @@
 # Albatross Logging
-Albatross Logging framework is an application framework built on top of Microsoft .Net.  It contains libraries and tools that solve common problems and patterns.
+A library that deals with logging for dotnet applications
 
 # Libraries
 |Name|Description||
