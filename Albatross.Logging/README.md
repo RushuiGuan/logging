@@ -7,12 +7,6 @@ Quick logging setup for your .Net application using Serilog.
 - [Enhanced SlackSink](../docs/enhanced-slacksink.md)
 
 ## Quick Start
-`Albatross.Logging` are integrated to the Albatross hosting projects below.
-* [Albatross.Hosting](../../hosting/Albatross.Hosting/)
-* [Albatross.CommandLine](../../commandline/Albatross.CommandLine/)
-* [Albatross.Hosting.Excel](../../excel/Albatross.Hosting.Excel/)
-* [Albatross.ReqnrollPlugin](../../testing/Albatross.ReqnrollPlugin/)
-
 To setup `Albatross.Logging` on your own, see the code below:
 ```csharp
 var logger = new SetupSerilog().Configure(ConfigureLogging).Create();
