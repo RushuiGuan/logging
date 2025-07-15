@@ -17,8 +17,8 @@ namespace Sample.CommandLine {
 
 		public Task<int> InvokeAsync(InvocationContext context) {
 			logger.LogInformation("An info msg");
-			logger.LogInformation("A warning msg");
-			logger.LogInformation("An err msg");
+			logger.LogWarning("A warning msg");
+			logger.LogError ("An err msg");
 			return Task.FromResult(0);
 		}
 	}
