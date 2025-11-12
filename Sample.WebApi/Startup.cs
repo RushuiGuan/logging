@@ -4,11 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Sample.WebApi {
 	public class Startup : Albatross.Hosting.Startup {
-		public override bool Swagger => true;
-		public override bool WebApi => true;
-		public override bool Secured => true;
-		public override bool Spa => false;
-
 		public Startup(IConfiguration configuration) : base(configuration) { }
 		public override void ConfigureServices(IServiceCollection services) {
 			base.ConfigureServices(services);

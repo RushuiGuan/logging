@@ -1,2 +1,8 @@
 # packages
 Albatross.Logging
+
+# apps
+Sample.CommandLine
+
+# services
+Sample.WebApi
