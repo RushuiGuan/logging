@@ -1,0 +1,62 @@
+{
+	"$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+	"metadata": [
+		{
+			"src": [
+				{
+					"src": "..",
+					"files": [
+						"Albatross.Logging/Albatross.Logging.csproj"
+					]
+				}
+			],
+			"output": "api"
+		}
+	],
+	"build": {
+		"sitemap": {
+			"baseUrl": "https://rushuiguan.github.io/logging",
+			"priority": 0.5,
+			"changefreq": "weekly"
+		},
+		"content": [
+			{
+				"files": [
+					"**/*.{md,yml}"
+				],
+				"exclude": [
+					"_site/**"
+				]
+			}
+		],
+		"resource": [
+			{
+				"files": [
+					"images/**",
+					"*.html",
+					"robots.txt",
+					".nojekyll"
+				]
+			}
+		],
+		"output": "_site",
+		"template": [
+			"default",
+			"modern"
+		],
+		"globalMetadata": {
+			"_appName": "Albatross.Logging",
+			"_appTitle": "Albatross.Logging",
+			"_appLogoPath": "./images/logo.svg",
+			"_appFaviconPath": "./images/favicon.svg",
+			"_enableSearch": true,
+			"pdf": false,
+			"_gitContribute": {
+				"repo": "https://github.com/rushuiguan/logging",
+				"branch": "main",
+				"path": "docfx_project"
+			},
+			"_gitUrlPattern": "github"
+		}
+	}
+}

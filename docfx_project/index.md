@@ -71,5 +71,5 @@ Sample `serilog.json`:
 ## Code Repo
 [https://github.com/RushuiGuan/logging](https://github.com/RushuiGuan/logging)
 
-## Documentation
-[https://rushuiguan.github.io/logging](https://rushuiguan.github.io/logging)
+## NuGet
+[https://www.nuget.org/packages/Albatross.Logging](https://www.nuget.org/packages/Albatross.Logging)
