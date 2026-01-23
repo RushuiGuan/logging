@@ -23,14 +23,10 @@ namespace Sample.CommandLine {
 		static void Configure(ParseResult result, IHostBuilder builder) {
 			builder.UseSerilog();
 			builder.ConfigureLogging((context, logging) => {
+				Albatross.Logging.Extensions.RemoveLegacySlackSinkOptions();
 				var setupSerilog = new SetupSerilog();
 				setupSerilog.UseConfigFile(EnvironmentSetting.DOTNET_ENVIRONMENT.Value, null, null, true);
-
-				var verbosityOption = result.GetVerbosityOption();
-				var logLevel = LogLevel.Error;
-				if (verbosityOption != null) {
-					logLevel = verbosityOption.GetLogLevel(result);
-				}
+				var logLevel = result.GetVerbosityOption()?.GetLogLevel(result) ?? LogLevel.Error;
 				if (logLevel != LogLevel.None) {
 					setupSerilog.UseConsole(logLevel.ToSerilogLevel());
 				}

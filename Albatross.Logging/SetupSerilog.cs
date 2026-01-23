@@ -64,9 +64,8 @@ namespace Albatross.Logging {
 			if (loggingLevel != null) {
 				consoleLoggingLevelSwitch.MinimumLevel = loggingLevel.Value;
 			}
-			cfg.MinimumLevel.ControlledBy(consoleLoggingLevelSwitch)
-				.WriteTo
-				.Console(outputTemplate: DefaultOutputTemplate)
+			cfg.WriteTo
+				.Console(levelSwitch: consoleLoggingLevelSwitch, outputTemplate: DefaultOutputTemplate)
 				.Enrich.FromLogContext();
 		}
 		public static void SwitchConsoleLoggingLevel(LogEventLevel loggingLevel) {
