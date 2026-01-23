@@ -9,8 +9,14 @@ namespace Albatross.Logging {
 		public const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:sszzz} [{Level:w3}] {SourceContext} {Message:lj}{NewLine}{Exception}";
 		Action<LoggerConfiguration>? configActions = null;
 
+		[Obsolete("Use the overload that includes the 'optional' parameter")]
 		public SetupSerilog UseConfigFile(string environment, string? basePath, string[]? commandLineArgs) {
 			Action<LoggerConfiguration> action = cfg => UseConfigFile(cfg, environment, basePath, commandLineArgs);
+			configActions += action;
+			return this;
+		}
+		public SetupSerilog UseConfigFile(string environment, string? basePath, string[]? commandLineArgs, bool optional) {
+			Action<LoggerConfiguration> action = cfg => UseConfigFile(cfg, environment, basePath, commandLineArgs, optional);
 			configActions += action;
 			return this;
 		}
@@ -36,13 +42,17 @@ namespace Albatross.Logging {
 			return logger;
 		}
 
-		public static void UseConfigFile(LoggerConfiguration cfg, string environment, string? basePath, string[]? commandlineArgs) {
+		[Obsolete("Use the overload that includes the 'optional' parameter")]
+		public static void UseConfigFile(LoggerConfiguration cfg, string environment, string? basePath, string[]? commandlineArgs)
+			=> UseConfigFile(cfg, environment, basePath, commandlineArgs, false);
+
+		public static void UseConfigFile(LoggerConfiguration cfg, string environment, string? basePath, string[]? commandlineArgs, bool optional) {
 			if (string.IsNullOrEmpty(basePath)) {
 				basePath = AppContext.BaseDirectory;
 			}
 			var configBuilder = new ConfigurationBuilder()
 				.SetBasePath(basePath!)
-				.AddJsonFile("serilog.json", false, true);
+				.AddJsonFile("serilog.json", optional, true);
 			if (!string.IsNullOrEmpty(environment)) { configBuilder.AddJsonFile($"serilog.{environment}.json", true, true); }
 			configBuilder.AddEnvironmentVariables();
 			var configuration = configBuilder.Build();

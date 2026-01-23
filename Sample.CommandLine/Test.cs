@@ -1,21 +1,19 @@
 ﻿using Albatross.CommandLine;
+using Albatross.CommandLine.Annotations;
 using Microsoft.Extensions.Logging;
-using System.CommandLine.Invocation;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sample.CommandLine {
-	[Verb("test", typeof(Test))]
+	[Verb<Test>("test")]
 	public class TestOptions { }
-
-	public class Test : ICommandHandler {
+	public class Test : IAsyncCommandHandler{
 		private readonly ILogger<Test> logger;
 
 		public Test(ILogger<Test> logger) {
 			this.logger = logger;
 		}
-		public int Invoke(InvocationContext context) { throw new System.NotImplementedException(); }
-
-		public Task<int> InvokeAsync(InvocationContext context) {
+		public Task<int> InvokeAsync(CancellationToken cancellationToken) {
 			logger.LogInformation("An info msg");
 			logger.LogWarning("A warning msg");
 			logger.LogError ("An err msg");
