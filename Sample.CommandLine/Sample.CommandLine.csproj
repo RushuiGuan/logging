@@ -6,8 +6,8 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Albatross.CommandLine" Version="8.0.5" />
-		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.5" />
+		<PackageReference Include="Albatross.CommandLine" Version="8.0.6" />
+		<PackageReference Include="Albatross.CommandLine.Defaults" Version="8.0.6" />
 		<PackageReference Include="Albatross.Config" Version="7.5.11" />
 	</ItemGroup>
 	<ItemGroup>

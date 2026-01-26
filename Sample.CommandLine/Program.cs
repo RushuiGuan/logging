@@ -15,6 +15,7 @@ namespace Sample.CommandLine {
 				.AddCommands()
 				.RegisterServices((_, x) => x.RegisterCommands())
 				.Parse(args, false)
+				.WithDefaults()
 				.ConfigureHost(Configure)
 				.Build();
 			return await host.InvokeAsync();

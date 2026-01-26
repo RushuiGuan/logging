@@ -2,7 +2,7 @@
 
 ## 10.0.2
 
-### Breaking Changes
+### Deprecations
 - `SetupSerilog.UseConfigFile(string, string?, string[]?)` is now marked as `[Obsolete]`. Use the new overload with the `optional` parameter instead.
 
 ### New Features

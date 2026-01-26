@@ -1,19 +1,28 @@
 {
   "Serilog": {
-    "MinimumLevel": {
-      "Default": "Debug",
-      "Override": {
-        "System": "Information",
-        "Microsoft": "Information"
-      }
-    },
     "WriteTo": [
       {
-        "Name": "File",
+        "Name": "Logger",
         "Args": {
-          "path": "log\\log.txt",
-          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ssz} [{Level:w3}] ({ThreadId}) {SourceContext} {Message:lj}{NewLine}{Exception}",
-          "rollingInterval": "Day"
+          "configureLogger": {
+            "MinimumLevel": {
+              "Default": "Information",
+              "Override": {
+                "System": "Error",
+                "Microsoft": "Error"
+              }
+            },
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "path": "log\\log.txt",
+                  "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ssz} [{Level:w3}] ({ThreadId}) {SourceContext} {Message:lj}{NewLine}{Exception}",
+                  "rollingInterval": "Day"
+                }
+              }
+            ]
+          }
         }
       }
     ],

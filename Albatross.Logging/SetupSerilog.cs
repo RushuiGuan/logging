@@ -21,6 +21,20 @@ namespace Albatross.Logging {
 			return this;
 		}
 
+		/// <summary>
+		/// Adds a console sink to the Serilog configuration pipeline with the specified minimum logging level.
+		/// The logging level is controlled by a shared <see cref="LoggingLevelSwitch"/> that can be changed at
+		/// runtime via <see cref="SwitchConsoleLoggingLevel(LogEventLevel)"/>. The console output uses the
+		/// <see cref="DefaultOutputTemplate"/> format and log events are enriched from
+		/// <see cref="Serilog.Context.LogContext"/>.
+		/// <para>
+		/// Note: This method sets the global <see cref="LoggerConfiguration.MinimumLevel"/> to
+		/// <see cref="LogEventLevel.Verbose"/>, which affects all sinks, not just the console sink.
+		/// The console sink itself is filtered by the shared <see cref="LoggingLevelSwitch"/>.
+		/// </para>
+		/// </summary>
+		/// <param name="loggingLevel">The minimum <see cref="LogEventLevel"/> for events written to the console.</param>
+		/// <returns>The current <see cref="SetupSerilog"/> instance for fluent method chaining.</returns>
 		public SetupSerilog UseConsole(LogEventLevel loggingLevel) {
 			Action<LoggerConfiguration> action = cfg => UseConsole(cfg, loggingLevel);
 			configActions += action;
@@ -60,12 +74,26 @@ namespace Albatross.Logging {
 		}
 
 		private static LoggingLevelSwitch consoleLoggingLevelSwitch = new LoggingLevelSwitch();
+
+		/// <summary>
+		/// Configures a console sink on the provided <see cref="LoggerConfiguration"/>. If <paramref name="loggingLevel"/>
+		/// is not null, the shared <see cref="LoggingLevelSwitch"/> is updated to the specified level.
+		/// Output is formatted using <see cref="DefaultOutputTemplate"/> and log events are enriched from
+		/// <see cref="Serilog.Context.LogContext"/>.
+		/// <para>
+		/// Note: This method sets the global <see cref="LoggerConfiguration.MinimumLevel"/> to
+		/// <see cref="LogEventLevel.Verbose"/>, which affects all sinks, not just the console sink.
+		/// The console sink itself is filtered by the shared <see cref="LoggingLevelSwitch"/>.
+		/// </para>
+		/// </summary>
+		/// <param name="cfg">The <see cref="LoggerConfiguration"/> to configure.</param>
+		/// <param name="loggingLevel">The minimum <see cref="LogEventLevel"/> for the console sink, or null to keep the current level.</param>
 		public static void UseConsole(LoggerConfiguration cfg, LogEventLevel? loggingLevel) {
 			if (loggingLevel != null) {
 				consoleLoggingLevelSwitch.MinimumLevel = loggingLevel.Value;
 			}
-			cfg.WriteTo
-				.Console(levelSwitch: consoleLoggingLevelSwitch, outputTemplate: DefaultOutputTemplate)
+			cfg.MinimumLevel.Verbose()
+				.WriteTo.Console(levelSwitch: consoleLoggingLevelSwitch, outputTemplate: DefaultOutputTemplate)
 				.Enrich.FromLogContext();
 		}
 		public static void SwitchConsoleLoggingLevel(LogEventLevel loggingLevel) {
