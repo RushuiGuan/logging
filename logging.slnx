@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".projects" />
+    <File Path="alias.ps1" />
+    <File Path="Directory.Build.props" />
+    <File Path="icon.png" />
+    <File Path="LICENSE" />
+  </Folder>
+  <Project Path="Albatross.Logging/Albatross.Logging.csproj" />
+  <Project Path="Sample.CommandLine/Sample.CommandLine.csproj" />
+  <Project Path="Sample.WebApi/Sample.WebApi.csproj" />
+</Solution>
