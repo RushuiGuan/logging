@@ -6,6 +6,7 @@ namespace Albatross.LogAnalysis.Daemon {
 		public static Task Main(string[] args) {
 			Environment.CurrentDirectory = AppContext.BaseDirectory;
 			return new MySetup(args)
+				.ConfigureWebHost<Startup>()
 				.ConfigureServiceHost<MyHostedService>()
 				.RunAsService()
 				.RunAsync();

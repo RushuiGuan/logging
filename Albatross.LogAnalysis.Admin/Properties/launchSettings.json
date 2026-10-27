@@ -1,0 +1,8 @@
+{
+	"profiles": {
+		"Albatross.LogAnalysis.Admin": {
+			"commandName": "Project",
+			"commandLineArgs": "database status"
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"profiles": {
+		"Albatross.LogAnalysis.Utility": {
+			"commandName": "Project",
+			"commandLineArgs": "app-info version"
+		}
+	}
+}

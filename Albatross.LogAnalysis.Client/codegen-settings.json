@@ -1,0 +1,6 @@
+{
+	"$schema": "codegen-settings-schema.json",
+	"namespace": "Albatross.LogAnalysis.Client",
+	"useInterface": true,
+	"useInternalProxy": true
+}

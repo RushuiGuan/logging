@@ -1,4 +1,16 @@
 <Solution>
+  <Folder Name="/LogAnalysis/">
+    <Project Path="Albatross.LogAnalysis.Admin/Albatross.LogAnalysis.Admin.csproj" />
+    <Project Path="Albatross.LogAnalysis.Client/Albatross.LogAnalysis.Client.csproj" />
+    <Project Path="Albatross.LogAnalysis.Daemon/Albatross.LogAnalysis.Daemon.csproj" />
+    <Project Path="Albatross.LogAnalysis.Database/Albatross.LogAnalysis.Database.csproj" />
+    <Project Path="Albatross.LogAnalysis.Utility/Albatross.LogAnalysis.Utility.csproj" />
+    <Project Path="Albatross.LogAnalysis/Albatross.LogAnalysis.csproj" />
+  </Folder>
+  <Folder Name="/Sample/">
+    <Project Path="Sample.CommandLine/Sample.CommandLine.csproj" />
+    <Project Path="Sample.WebApi/Sample.WebApi.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
@@ -8,10 +20,5 @@
     <File Path="icon.png" />
     <File Path="LICENSE" />
   </Folder>
-  <Project Path="Albatross.LogAnalysis.Database/Albatross.LogAnalysis.Database.csproj" />
-  <Project Path="Albatross.LogAnalysis/Albatross.LogAnalysis.csproj" />
-  <Project Path="Albatross.LogAnalysis.Daemon/Albatross.LogAnalysis.Daemon.csproj" />
   <Project Path="Albatross.Logging/Albatross.Logging.csproj" />
-  <Project Path="Sample.CommandLine/Sample.CommandLine.csproj" />
-  <Project Path="Sample.WebApi/Sample.WebApi.csproj" />
 </Solution>

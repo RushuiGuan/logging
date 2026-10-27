@@ -2,6 +2,8 @@
 Albatross.Logging
 
 # apps
+Albatross.LogAnalysis.Admin
+Albatross.LogAnalysis.Utility
 Sample.CommandLine
 
 # services

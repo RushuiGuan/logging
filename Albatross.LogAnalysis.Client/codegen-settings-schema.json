@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "CSharpWebClientSettings",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "controllerFilters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SymbolFilterPatterns"
+      }
+    },
+    "controllerMethodFilters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SymbolFilterPatterns"
+      }
+    },
+    "dtoEnumFilters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SymbolFilterPatterns"
+      }
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "useInterface": {
+      "type": "boolean"
+    },
+    "useInternalProxy": {
+      "type": "boolean"
+    },
+    "constructorSettings": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/WebClientConstructorSettings"
+      }
+    },
+    "customTypeMapping": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "definitions": {
+    "SymbolFilterPatterns": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "exclude": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "include": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "hasValue": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WebClientConstructorSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "compressionEncoding": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "omit": {
+          "type": "boolean"
+        },
+        "customJsonSettings": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    }
+  }
+}
