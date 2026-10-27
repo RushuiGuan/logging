@@ -1,0 +1,17 @@
+using Albatross.EFCore;
+using Albatross.LogAnalysis.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Albatross.LogAnalysis.Database.Postgres {
+	public class AnalysisPostgresDbSession : DbSession, IAnalysisDbSession {
+		public AnalysisPostgresDbSession(DbContextOptions<AnalysisPostgresDbSession> option) : base(option) {
+		}
+
+		protected AnalysisPostgresDbSession(DbContextOptions option) : base(option) {
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder) {
+			modelBuilder.HasDefaultSchema(Albatross.LogAnalysis.Models.Extensions.Schema);
+		}
+	}
+}

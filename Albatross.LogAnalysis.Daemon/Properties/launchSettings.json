@@ -1,6 +1,6 @@
 {
 	"profiles": {
-		"Albatross.Logging.Daemon": {
+		"Albatross.LogAnalysis.Daemon": {
 			"commandName": "Project"
 		}
 	}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Albatross.EFCore" Version="10.0.1" />
+		<PackageReference Include="Albatross.EFCore.PostgreSQL" Version="10.0.1" />
+		<PackageReference Include="Albatross.EFCore.SqlServer" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Albatross.LogAnalysis\Albatross.LogAnalysis.csproj" />
+	</ItemGroup>
+</Project>

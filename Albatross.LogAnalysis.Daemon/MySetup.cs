@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Albatross.Logging.Daemon {
+namespace Albatross.LogAnalysis.Daemon {
 	public class MySetup : Setup {
 		public MySetup(string[] args) : base(args, AppContext.BaseDirectory) { }
 

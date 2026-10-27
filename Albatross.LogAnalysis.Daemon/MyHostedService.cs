@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Albatross.Logging.Daemon {
+namespace Albatross.LogAnalysis.Daemon {
 	public class MyHostedService : IHostedService {
 		private readonly RouterServer server;
 		private readonly ILogger<MyHostedService> logger;

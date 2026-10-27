@@ -17,7 +17,7 @@
 			"File": {
 				"Name": "File",
 				"Args": {
-					"path": "%LogDirectory%\\Albatross.Logging.Daemon\\Albatross.Logging.Daemon.log",
+					"path": "%LogDirectory%\\Albatross.LogAnalysis.Daemon\\Albatross.LogAnalysis.Daemon.log",
 					"outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ssz} {MachineName} {SourceContext} {ThreadId} [{Level:w3}] {Message:lj}{NewLine}{Exception}",
 					"rollingInterval": "Day"
 				}

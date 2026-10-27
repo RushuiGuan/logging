@@ -1,8 +1,8 @@
 ---
-name: Albatross.Logging.Daemon
+name: Albatross.LogAnalysis.Daemon
 status: active
 created: 2026-10-08T08:24:27-04:00
-updated: 2026-10-27T10:20:00-04:00
+updated: 2026-10-27T11:30:00-04:00
 ---
 
 ## Business Requirements

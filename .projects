@@ -5,5 +5,5 @@ Albatross.Logging
 Sample.CommandLine
 
 # services
-Albatross.Logging.Daemon
+Albatross.LogAnalysis.Daemon
 Sample.WebApi
