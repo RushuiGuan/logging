@@ -2,7 +2,7 @@
 name: Albatross.Logging.Daemon
 status: active
 created: 2026-10-08T08:24:27-04:00
-updated: 2026-10-08T09:35:00-04:00
+updated: 2026-10-27T10:20:00-04:00
 ---
 
 ## Business Requirements
@@ -20,14 +20,14 @@ Developers are the primary readers. Reports can include technical detail such as
 
 The daemon is a long-running service built on Albatross.Hosting. It can run as a Windows service and uses Albatross.Messaging for its command bus.
 
-It finds app log folders under a log root and through configured entries, and reads new lines as they are appended. Each app has its own output template, so lines are parsed using the template configured for that app. A single parsed entry then feeds four paths:
+It finds app log folders under a log root and through configured entries, and reads new lines as they are appended. Each file's format is detected from a shared library of format definitions, and its lines are parsed into entries using that format. A single parsed entry then feeds four paths:
 
 - **Error path:** Error and Fatal entries are collected over a short batching window. When the window closes, a rules-based stage groups them into distinct errors and counts them. An optional LLM stage adds a short narrative, and the summary goes out to the configured delivery channels.
 - **Usage path:** entries that record endpoint activity are added to usage statistics in the database, grouped by app, endpoint, and time bucket. Nothing is delivered. The statistics are there to be queried.
 - **Sufficiency path:** each app's logs are checked against the minimum logging requirements, and any app that falls short is reported.
 - **Performance path:** for apps that have it configured, app-specific rules pull timing measurements out of entries and store them as benchmark statistics in the database.
 
-Processing state and all output are stored in a database.
+Format definitions, processing state, and all output are stored in one database, which can be SQL Server or PostgreSQL. Data access uses one shared Albatross.EFCore entity model, with a separate database session for each provider. Configuration picks the provider, and each provider has its own migrations.
 
 ## Key Design Decisions
 
@@ -79,13 +79,21 @@ Usage statistics go to the database for later querying, and no usage report is s
 
 Performance extraction is set up for each app individually. It is not a general rule applied to every app, because apps don't log timings in a shared format. An app with no performance setup is simply skipped by this path. Like usage, benchmark statistics are stored to be queried, not sent as reports.
 
-### Logs are parsed with per-app templates
+### Formats come from a shared definition library
 
-Logs are plain text. The daemon parses each app's lines with a message template configured for that app. A single universal format was rejected, because apps use different templates. Lines can also contain embedded JSON data, which is treated as part of the message and not as the line's structure.
+Logs are plain text in a small number of distinct formats, so each format is defined once, given a name, and shared by every app that uses it. Defining a format for each app was rejected, because many apps share the same template. A Serilog format is defined by its output template, the same string developers write in their Serilog configuration. A format from another logging library is defined by a regular expression with named fields, and can say how to get the date from the file name when lines only have the time of day. A line that doesn't match the start of the format continues the previous entry, which keeps stack traces attached. Level names are mapped to one standard set. Embedded JSON is treated as part of the message.
+
+### Each file's format is detected
+
+The daemon finds a file's format by trying the known definitions against the first lines of the file and picking the best match. Configuration can pin an app to a format when detection gets it wrong. A required mapping from each app to its format was rejected, because it is one more list to keep up to date. Detecting per file also handles an app that changes its template partway through its life. A file that matches no format well enough is reported as a logging sufficiency finding.
+
+### Format definitions are versioned
+
+Each change to a format definition creates a new version, and output records which version produced it. That shows which files were parsed with a faulty definition and need reprocessing while their source files still exist.
 
 ### Log files are found by discovery plus configuration
 
-The daemon discovers app logs under a log root (one subfolder per app). Configuration can add locations outside that root, exclude discovered ones, and provide each app's template. This way new apps are picked up with little setup, and odd layouts can still be handled.
+The daemon discovers app logs under a log root (one subfolder per app). Configuration can add locations outside that root, exclude discovered ones, and pin an app to a format. This way new apps are picked up with little setup, and odd layouts can still be handled.
 
 ### Rules first, LLM optional
 
@@ -95,16 +103,19 @@ A deterministic stage always produces the error summary by grouping and counting
 
 Error summaries and sufficiency findings can be delivered to files, Slack, and email. Each channel is optional and is configured on its own.
 
-### State is kept in a database
+### Everything is kept in one database
 
-Processing state and all output are stored in a database rather than in local files. The output is permanent and has to be queryable over time, and state has to survive moving the daemon to another host.
+Format definitions, configuration, processing state, and all output live in one database. Keeping everything in files was rejected for three reasons. Daemons on several servers need to share the same definitions. The permanent output has to be queryable across all apps. And with one store, only one thing has to be deployed and backed up. The cost is that definitions are no longer files tracked in source control, so they need their own management tool.
+
+### Both databases are first-class
+
+SQL Server and PostgreSQL are equally supported. Neither one is the primary target, and the provider is chosen in configuration. There is one entity model built on Albatross.EFCore, a database session for each provider, and migrations generated separately for each. Any schema, query, or migration change is incomplete until it works on both providers. Supporting only one engine was rejected, because the daemon should run on whichever database a team already operates.
 
 ## Open Questions
 
 ### Errors
 
 - **Error grouping:** how are two error lines judged to be "the same error"? A likely key is source context plus exception type plus a normalized message, with numbers, GUIDs, IDs, and embedded JSON values stripped out.
-- **Multi-line entries:** exceptions with stack traces span several lines. Each app's parser has to attach the extra lines to the entry they belong to.
 - **Batching window:** how long is the window? Is it fixed, or does it start at the first error and close after a quiet period?
 - **Content:** what goes in an error summary beyond the distinct errors and their counts? For example, a sample stack trace, or the log lines just before the error.
 - **Per-channel limits:** do Slack and email need a rate limit or a cap on size during a long outage?
@@ -125,10 +136,15 @@ Processing state and all output are stored in a database rather than in local fi
 - **What is measured:** which timings matter (request duration, job duration, timer lines that apps log), and how are they identified in each app's logs?
 - **How app-specific rules are defined:** through configuration (patterns for each app), or through code extensions plugged into the daemon?
 
+### Formats
+
+- **Definition management:** how are definitions added, edited, and tested? Options are a command-line tool or messaging commands to the daemon. Either way, it should be able to test a definition against a sample file before saving it.
+- **Detection threshold:** what share of lines must match before a format is accepted, and how many lines are sampled?
+- **Initial library:** which formats are needed to cover the current apps?
+
 ### General
 
 - **Deployment topology:** one daemon on each server reading local files, or one central daemon reading every server's log location over the network?
-- **Database:** which engine (SQL Server or Postgres)?
 - **The active file versus "process once":** the newest file is still being written to. Is it read while it grows (fast error alerts, with its output replaced as more lines arrive), or only once it has rolled over (simpler, but errors are reported up to a day late)?
 - **Backlog:** files are processed oldest first, so after downtime the daemon catches up through the backlog. Should errors found in old files during a catch-up send alerts, or only be stored? On first run, how far back should it go: all existing files (up to six months), or a configured cutoff?
 - **Triggering reprocessing:** is a file reprocessed only when someone asks for it (for example through a messaging command), or also automatically when it changes after it was processed?
@@ -142,4 +158,4 @@ Processing state and all output are stored in a database rather than in local fi
 - Log formats differ between apps. Some put the date, machine name, or thread ID in each line. At least one app writes a different format that has only the time of day in each line, so its date has to come from the file name.
 - The log volume is too large for a person to read, so the daemon must work through it incrementally rather than rereading whole files.
 - Log files are purged every six months. Daemon output is kept forever, so anything not captured from a file before it is purged is lost for good.
-- Needs a database to store its state and output.
+- Needs a SQL Server or PostgreSQL database to store its format definitions, state, and output. Every schema change must work on both.
